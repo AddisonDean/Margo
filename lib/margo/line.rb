@@ -3,6 +3,7 @@ class Margo::Line
   attr_accessor :equation
   attr_accessor :smallest_x
   attr_accessor :largest_x
+  attr_accessor :react_cmd
 
   def initialize(pt1, pt2)
     @points = [pt1, pt2]
@@ -31,13 +32,20 @@ class Margo::Line
     end
   end
 
-  def collision(ball_x, ball_y)
+  def collision(ball_x, ball_y, margin = 0)
+    exact_target = (equation[0] * ball_x) + equation[1]
     @answer = false
     if ball_x <= largest_x && ball_x >= smallest_x
-      @answer = true if ball_y == (equation[0] * ball_x) + equation[1]
+      @answer = true if ball_y <= exact_target + margin && ball_y >= exact_target - margin
     end
     @answer
   end
 
-  def react; end
+  def set_react_cmd(text)
+    @react_cmd = text
+  end
+
+  def react
+    react_cmd
+  end
 end
